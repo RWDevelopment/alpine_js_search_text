@@ -1,0 +1,98 @@
+
+<html x-data="App()" data-theme="light">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <style>
+        mark {
+            padding: 0;
+            border-radius: var(--border-radius);
+            color: var(--contrast);
+        }
+        input[type=text] {
+            width: 300px;
+        }
+
+    </style>
+</head>
+<body>
+
+ <main class="container">
+
+    <header class="container">
+ 
+    <nav>
+      <ul>
+        <li><input type="text" autocomplete="off" x-model="search" @input="searchItems" placeholder="type text to search..."></li>
+        <li><span x-show="open">found <span x-text="matches"></span> for <q><strong x-text="search"></strong></q></span></li>
+      </ul>
+    </nav>
+    
+    </header>
+
+    
+    <div role="article">
+        
+        <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit</h3>
+        <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem sunt ut nesciunt culpa corporis esse? Incidunt, tenetur doloremque recusandae fuga aut pariatur asperiores rem aliquam nam, laboriosam alias. Doloremque!
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti, facilis consectetur cumque, nobis impedit, sint illum voluptatum optio mollitia excepturi voluptas ipsum eligendi iusto dolor aut itaque laboriosam provident debitis!
+        </p>
+        <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam quidem sunt ut nesciunt culpa corporis esse? Incidunt, tenetur doloremque recusandae fuga aut pariatur asperiores rem aliquam nam, laboriosam alias. Doloremque!
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti, facilis consectetur cumque, nobis impedit, sint illum voluptatum optio mollitia excepturi voluptas ipsum eligendi iusto dolor aut itaque laboriosam provident debitis!
+        </p>
+        <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum eum similique, soluta voluptas nobis architecto et tenetur. Corporis ex eum ut, recusandae praesentium aspernatur placeat, animi accusantium labore architecto quos.
+        </p>
+        
+    </div>
+        
+   
+ </main>   
+
+
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script>
+    document.addEventListener('alpine:init', () => {
+
+        Alpine.data('App', () => ({
+            search: null,
+            matches: 0,
+            open: false,
+
+            searchItems() {
+
+                [...document.querySelectorAll('div[role=article] > *')].forEach( (el)=> {
+
+                    let text = el.innerHTML
+                    const regex = new RegExp(this.search, 'gi')
+
+                    text = text.replace(/(<mark>|<\/mark>)/gim, '')
+                    const newText = text.replace(regex, '<mark>$&</mark>')
+
+                    el.innerHTML = newText
+
+                })
+
+                if(this.search.length > 0) {
+
+                    this.open = true
+
+                    const array = [...document.querySelectorAll('div[role=article] mark')];
+                    this.matches = array.length
+
+                } else {
+
+                    this.open = false
+                    this.matches = 0
+
+                }
+                
+            }
+            
+        }))
+
+})
+</script>
+</body>
+</html>
